@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Pulse | Clinic Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --dark: #0f172a;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --border: #e2e8f0;
+            --text: #1e293b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+        /* Top Navigation */
+        nav {
+            background: var(--dark);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 1.1rem; }
+        
+        .container { padding: 1.2rem; max-width: 500px; margin: 0 auto; }
+
+        /* Stats Row */
+        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 1rem 0; }
+        .s-card { background: var(--card); padding: 1rem; border-radius: 12px; border: 1px solid var(--border); }
+        .s-card p { font-size: 0.75rem; color: #64748b; font-weight: 600; }
+        .s-card h2 { font-size: 1.4rem; color: var(--primary); }
+
+        /* Patient List */
+        .section-box { background: var(--card); border-radius: 16px; padding: 1.2rem; border: 1px solid var(--border); margin-bottom: 1.5rem; }
+        .section-title { font-weight: 600; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        
+        .patient-item { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 12px 0; border-top: 1px solid #f1f5f9;
+        }
+        .p-name { font-weight: 600; font-size: 0.95rem; }
+        .p-desc { font-size: 0.8rem; color: #64748b; }
+
+        .btn-action { 
+            background: var(--primary); color: white; border: none; 
+            padding: 8px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; 
+        }
+
+        /* Floating Consultation Form (Hidden) */
+        #consult-form {
+            display: none; position: fixed; inset: 0; background: var(--bg); z-index: 300; padding: 1.5rem;
+        }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; }
+        input, textarea { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; }
+
+        /* Prescription View (Hidden) */
+        #rx-view {
+            display: none; position: fixed; inset: 0; background: white; z-index: 400; padding: 2rem;
+        }
+        .rx-box { border: 2px solid var(--dark); height: 80vh; padding: 1.5rem; position: relative; }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo"><i data-lucide="pulse"></i> THE PULSE</div>
+        <i data-lucide="user-circle"></i>
+    </nav>
+
+    <div class="container">
+        <div class="stats">
+            <div class="s-card"><p>ACTIVE</p><h2>18</h2></div>
+            <div class="s-card"><p>COMPLETED</p><h2>42</h2></div>
+        </div>
+
+        <div class="section-box">
+            <div class="section-title">Queue <span><i data-lucide="list"></i></span></div>
+            
+            <div class="patient-item">
+                <div class="p-info">
+                    <p class="p-name">Rahul Mehta</p>
+                    <p class="p-desc">ID: #4401 • Hypertension</p>
+                </div>
+                <button class="btn-action" onclick="openRx('Rahul Mehta', 'Amlodipine 5mg (0-0-1)')">Open Rx</button>
+            </div>
+
+            <div class="patient-item">
+                <div class="p-info">
+                    <p class="p-name">Simran Kaur</p>
+                    <p class="p-desc">ID: #4405 • Viral Fever</p>
+                </div>
+                <button class="btn-action" onclick="openRx('Simran Kaur', 'Paracetamol 650mg (1-1-1)')">Open Rx</button>
+            </div>
+        </div>
+
+        <button onclick="toggleForm(true)" style="width: 100%; background: var(--dark); color: white; padding: 15px; border-radius: 12px; border: none; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <i data-lucide="plus-circle"></i> Start New Consultation
+        </button>
+    </div>
+
+    <!-- Consultation Form Mockup -->
+    <div id="consult-form">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h2>New Entry</h2>
+            <i data-lucide="x" onclick="toggleForm(false)"></i>
+        </div>
+        <div class="form-group">
+            <label>Patient Name</label>
+            <input type="text" placeholder="Full Name">
+        </div>
+        <div class="form-group">
+            <label>Symptoms / Diagnosis</label>
+            <textarea rows="4" placeholder="Enter clinical notes..."></textarea>
+        </div>
+        <button class="btn-action" style="width: 100%; padding: 15px;" onclick="toggleForm(false)">Save Consultation</button>
+    </div>
+
+    <!-- Prescription Mockup -->
+    <div id="rx-view">
+        <div class="rx-box">
+            <h2 style="color: var(--primary);">THE PULSE</h2>
+            <p style="font-size: 0.8rem; border-bottom: 1px solid #000; padding-bottom: 10px;">Digital Prescription System</p>
+            
+            <div style="margin-top: 20px;">
+                <p><strong>Patient:</strong> <span id="rx-n"></span></p>
+                <p><strong>Date:</strong> 02/05/2026</p>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <h2 style="font-style: italic;">Rx</h2>
+                <p id="rx-m" style="font-size: 1.2rem; margin-top: 10px; font-weight: 600;"></p>
+            </div>
+
+            <div style="position: absolute; bottom: 20px; right: 20px; text-align: center;">
+                <div style="width: 100px; border-top: 1px solid #000;">Signature</div>
+            </div>
+        </div>
+        <button onclick="closeRx()" style="width: 100%; background: #ef4444; color: white; margin-top: 1rem; padding: 12px; border: none; border-radius: 8px; font-weight: 600;">Close Preview</button>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function toggleForm(show) {
+            document.getElementById('consult-form').style.display = show ? 'block' : 'none';
+        }
+
+        function openRx(name, med) {
+            document.getElementById('rx-n').innerText = name;
+            document.getElementById('rx-m').innerText = med;
+            document.getElementById('rx-view').style.display = 'block';
+        }
+
+        function closeRx() {
+            document.getElementById('rx-view').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
