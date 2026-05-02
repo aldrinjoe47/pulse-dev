@@ -3,171 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Pulse | Clinic Management</title>
+    <title>The Pulse | Live Demo</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
     <style>
-        :root {
-            --primary: #2563eb;
-            --dark: #0f172a;
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --border: #e2e8f0;
-            --text: #1e293b;
-        }
-
+        :root { --primary: #2563eb; --dark: #0f172a; --bg: #f8fafc; --card: #ffffff; --border: #e2e8f0; --text: #1e293b; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--text); overflow-x: hidden; }
+        body { background: var(--bg); color: var(--text); padding-bottom: 80px; }
 
-        /* Top Navigation */
-        nav {
-            background: var(--dark);
-            color: white;
-            padding: 1rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 1.1rem; }
-        
+        nav { background: var(--dark); color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
         .container { padding: 1.2rem; max-width: 500px; margin: 0 auto; }
 
-        /* Stats Row */
-        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 1rem 0; }
-        .s-card { background: var(--card); padding: 1rem; border-radius: 12px; border: 1px solid var(--border); }
-        .s-card p { font-size: 0.75rem; color: #64748b; font-weight: 600; }
-        .s-card h2 { font-size: 1.4rem; color: var(--primary); }
+        /* Real-time Clock */
+        .live-status { font-size: 0.8rem; color: #94a3b8; margin-bottom: 1rem; display: flex; justify-content: space-between; }
 
-        /* Patient List */
-        .section-box { background: var(--card); border-radius: 16px; padding: 1.2rem; border: 1px solid var(--border); margin-bottom: 1.5rem; }
-        .section-title { font-weight: 600; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
-        
-        .patient-item { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 12px 0; border-top: 1px solid #f1f5f9;
-        }
-        .p-name { font-weight: 600; font-size: 0.95rem; }
-        .p-desc { font-size: 0.8rem; color: #64748b; }
+        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+        .s-card { background: var(--card); padding: 1.2rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .s-card h2 { font-size: 1.5rem; color: var(--primary); }
 
-        .btn-action { 
-            background: var(--primary); color: white; border: none; 
-            padding: 8px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; 
-        }
+        .search-bar { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 1.5rem; outline: none; }
 
-        /* Floating Consultation Form (Hidden) */
-        #consult-form {
-            display: none; position: fixed; inset: 0; background: var(--bg); z-index: 300; padding: 1.5rem;
-        }
-        .form-group { margin-bottom: 1rem; }
-        label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; }
-        input, textarea { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; }
+        .section-box { background: var(--card); border-radius: 16px; padding: 1.2rem; border: 1px solid var(--border); }
+        .patient-list { margin-top: 10px; }
+        .patient-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-top: 1px solid #f1f5f9; animation: fadeIn 0.5s ease; }
 
-        /* Prescription View (Hidden) */
-        #rx-view {
-            display: none; position: fixed; inset: 0; background: white; z-index: 400; padding: 2rem;
-        }
-        .rx-box { border: 2px solid var(--dark); height: 80vh; padding: 1.5rem; position: relative; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        .btn-action { background: var(--primary); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+
+        /* Full-screen Overlay for Form */
+        #consult-form { display: none; position: fixed; inset: 0; background: white; z-index: 300; padding: 2rem; }
+        .form-input { width: 100%; padding: 12px; margin: 10px 0 20px 0; border: 1px solid var(--border); border-radius: 8px; background: #f9fafb; }
+
+        /* Rx Modal */
+        #rx-view { display: none; position: fixed; inset: 0; background: white; z-index: 400; padding: 2rem; overflow-y: auto; }
+        .rx-box { border: 2px solid var(--dark); padding: 20px; min-height: 70vh; }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo"><i data-lucide="pulse"></i> THE PULSE</div>
-        <i data-lucide="user-circle"></i>
+        <div style="display: flex; align-items: center; gap: 8px; font-weight: 600;"><i data-lucide="activity"></i> THE PULSE</div>
+        <div id="clock" style="font-size: 0.8rem; font-weight: 300;"></div>
     </nav>
 
     <div class="container">
-        <div class="stats">
-            <div class="s-card"><p>ACTIVE</p><h2>18</h2></div>
-            <div class="s-card"><p>COMPLETED</p><h2>42</h2></div>
+        <div class="live-status">
+            <span>Status: <b style="color: #22c55e;">● Live</b></span>
+            <span>Dr. Mode</span>
         </div>
+
+        <div class="stats">
+            <div class="s-card"><p style="font-size: 0.7rem; font-weight: 700;">TOTAL QUEUE</p><h2 id="q-count">2</h2></div>
+            <div class="s-card"><p style="font-size: 0.7rem; font-weight: 700;">READY RX</p><h2>14</h2></div>
+        </div>
+
+        <input type="text" class="search-bar" placeholder="Search patients..." onkeyup="filterPatients(this.value)">
 
         <div class="section-box">
-            <div class="section-title">Queue <span><i data-lucide="list"></i></span></div>
-            
-            <div class="patient-item">
-                <div class="p-info">
-                    <p class="p-name">Rahul Mehta</p>
-                    <p class="p-desc">ID: #4401 • Hypertension</p>
-                </div>
-                <button class="btn-action" onclick="openRx('Rahul Mehta', 'Amlodipine 5mg (0-0-1)')">Open Rx</button>
-            </div>
-
-            <div class="patient-item">
-                <div class="p-info">
-                    <p class="p-name">Simran Kaur</p>
-                    <p class="p-desc">ID: #4405 • Viral Fever</p>
-                </div>
-                <button class="btn-action" onclick="openRx('Simran Kaur', 'Paracetamol 650mg (1-1-1)')">Open Rx</button>
+            <div style="font-weight: 600; margin-bottom: 10px;">Patient Queue</div>
+            <div id="patient-list" class="patient-list">
+                <!-- Patients will be added here -->
             </div>
         </div>
 
-        <button onclick="toggleForm(true)" style="width: 100%; background: var(--dark); color: white; padding: 15px; border-radius: 12px; border: none; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px;">
-            <i data-lucide="plus-circle"></i> Start New Consultation
+        <button onclick="openForm()" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; background: var(--dark); color: white; padding: 16px; border-radius: 14px; border: none; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
+            <i data-lucide="plus"></i> New Consultation
         </button>
     </div>
 
-    <!-- Consultation Form Mockup -->
+    <!-- Live Entry Form -->
     <div id="consult-form">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-            <h2>New Entry</h2>
-            <i data-lucide="x" onclick="toggleForm(false)"></i>
+        <div style="display:flex; justify-content: space-between; align-items: center;">
+            <h2>New Consultation</h2>
+            <i data-lucide="x" onclick="closeForm()"></i>
         </div>
-        <div class="form-group">
+        <div style="margin-top: 30px;">
             <label>Patient Name</label>
-            <input type="text" placeholder="Full Name">
+            <input type="text" id="new-p-name" class="form-input" placeholder="Enter name...">
+            <label>Diagnosis</label>
+            <input type="text" id="new-p-diag" class="form-input" placeholder="e.g. Seasonal Flu">
+            <label>Prescription (Medication)</label>
+            <textarea id="new-p-med" class="form-input" rows="3" placeholder="e.g. Paracetamol 500mg"></textarea>
+            <button class="btn-action" style="width: 100%; padding: 15px;" onclick="savePatient()">Add to System & Sync</button>
         </div>
-        <div class="form-group">
-            <label>Symptoms / Diagnosis</label>
-            <textarea rows="4" placeholder="Enter clinical notes..."></textarea>
-        </div>
-        <button class="btn-action" style="width: 100%; padding: 15px;" onclick="toggleForm(false)">Save Consultation</button>
     </div>
 
-    <!-- Prescription Mockup -->
+    <!-- Rx View -->
     <div id="rx-view">
         <div class="rx-box">
-            <h2 style="color: var(--primary);">THE PULSE</h2>
-            <p style="font-size: 0.8rem; border-bottom: 1px solid #000; padding-bottom: 10px;">Digital Prescription System</p>
-            
+            <div style="display:flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 10px;">
+                <h2 color="var(--primary)">PULSE RX</h2>
+                <p id="rx-date"></p>
+            </div>
             <div style="margin-top: 20px;">
-                <p><strong>Patient:</strong> <span id="rx-n"></span></p>
-                <p><strong>Date:</strong> 02/05/2026</p>
-            </div>
-
-            <div style="margin-top: 30px;">
-                <h2 style="font-style: italic;">Rx</h2>
-                <p id="rx-m" style="font-size: 1.2rem; margin-top: 10px; font-weight: 600;"></p>
-            </div>
-
-            <div style="position: absolute; bottom: 20px; right: 20px; text-align: center;">
-                <div style="width: 100px; border-top: 1px solid #000;">Signature</div>
+                <p><strong>Patient:</strong> <span id="rx-name-display"></span></p>
+                <h1 style="font-size: 3rem; opacity: 0.1; position: absolute;">Rx</h1>
+                <p id="rx-med-display" style="margin-top: 40px; font-size: 1.2rem; font-weight: 600;"></p>
             </div>
         </div>
-        <button onclick="closeRx()" style="width: 100%; background: #ef4444; color: white; margin-top: 1rem; padding: 12px; border: none; border-radius: 8px; font-weight: 600;">Close Preview</button>
+        <button class="btn-action" style="width:100%; margin-top: 20px; background: #dc2626;" onclick="closeRx()">Close Preview</button>
     </div>
 
     <script>
         lucide.createIcons();
+        
+        // Initial Mock Data
+        let patients = [
+            { name: "Rahul Mehta", diag: "Hypertension", med: "Amlodipine 5mg", id: "8801" },
+            { name: "Simran Kaur", diag: "Viral Fever", med: "PCM 650mg", id: "8802" }
+        ];
 
-        function toggleForm(show) {
-            document.getElementById('consult-form').style.display = show ? 'block' : 'none';
+        // 1. Live Clock
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+        }, 1000);
+
+        // 2. Render Patients
+        function renderPatients(data = patients) {
+            const list = document.getElementById('patient-list');
+            list.innerHTML = "";
+            data.forEach((p, index) => {
+                list.innerHTML += `
+                    <div class="patient-item">
+                        <div>
+                            <p class="p-name">${p.name}</p>
+                            <p style="font-size: 0.75rem; color: #64748b;">${p.diag} • ID: #${p.id}</p>
+                        </div>
+                        <button class="btn-action" style="background:#eff6ff; color:#2563eb;" onclick="showRx(${index})">View Rx</button>
+                    </div>
+                `;
+            });
+            document.getElementById('q-count').innerText = data.length;
         }
 
-        function openRx(name, med) {
-            document.getElementById('rx-n').innerText = name;
-            document.getElementById('rx-m').innerText = med;
+        // 3. Simulated Search
+        function filterPatients(val) {
+            const filtered = patients.filter(p => p.name.toLowerCase().includes(val.toLowerCase()));
+            renderPatients(filtered);
+        }
+
+        // 4. Save New Patient (The "Magic" part)
+        function savePatient() {
+            const name = document.getElementById('new-p-name').value;
+            const diag = document.getElementById('new-p-diag').value;
+            const med = document.getElementById('new-p-med').value;
+            
+            if(name) {
+                const newId = Math.floor(1000 + Math.random() * 9000);
+                patients.unshift({ name, diag, med, id: newId });
+                renderPatients();
+                closeForm();
+                // Reset fields
+                document.getElementById('new-p-name').value = "";
+                document.getElementById('new-p-diag').value = "";
+                document.getElementById('new-p-med').value = "";
+            }
+        }
+
+        function showRx(idx) {
+            const p = patients[idx];
+            document.getElementById('rx-name-display').innerText = p.name;
+            document.getElementById('rx-med-display').innerText = p.med;
+            document.getElementById('rx-date').innerText = new Date().toLocaleDateString();
             document.getElementById('rx-view').style.display = 'block';
         }
 
-        function closeRx() {
-            document.getElementById('rx-view').style.display = 'none';
-        }
+        function openForm() { document.getElementById('consult-form').style.display = 'block'; }
+        function closeForm() { document.getElementById('consult-form').style.display = 'none'; }
+        function closeRx() { document.getElementById('rx-view').style.display = 'none'; }
+
+        // Initial Load
+        renderPatients();
     </script>
 </body>
 </html>
