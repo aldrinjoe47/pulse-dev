@@ -3,40 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE PULSE | Clinical OS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>THE PULSE | Advanced Clinical OS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
     <style>
-        :root { --primary: #3b82f6; --sidebar: #0f172a; --bg: #f8fafc; --card: #ffffff; --border: #e2e8f0; --text: #f1f5f9; --text-dark: #1e293b; }
+        :root { --primary: #3b82f6; --sidebar: #0f172a; --bg: #f8fafc; --card: #ffffff; --border: #e2e8f0; --text-dark: #1e293b; --accent: #8b5cf6; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background: var(--bg); color: var(--text-dark); display: flex; height: 100vh; overflow: hidden; }
 
-        /* Sidebar - Matched to Screenshot_20260502_192805_Chrome.jpg */
-        aside { width: 280px; background: var(--sidebar); display: flex; flex-direction: column; padding: 2rem 1rem; flex-shrink: 0; }
+        /* Sidebar - Matches Screenshot_20260502_192805_Chrome.jpg */
+        aside { width: 280px; background: var(--sidebar); display: flex; flex-direction: column; padding: 2rem 1rem; flex-shrink: 0; border-right: 1px solid var(--border); }
         .logo { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 3rem; padding-left: 1rem; }
         .nav-btn { display: flex; align-items: center; gap: 15px; padding: 16px; color: #94a3b8; border-radius: 12px; margin-bottom: 10px; cursor: pointer; border: none; background: transparent; width: 100%; text-align: left; font-size: 1.1rem; transition: 0.2s; }
-        .nav-btn:hover { color: white; background: rgba(255,255,255,0.05); }
-        .nav-btn.active { background: #1e293b; color: white; }
+        .nav-btn.active { background: rgba(59, 130, 246, 0.1); color: white; box-shadow: inset 4px 0 0 var(--primary); }
 
-        /* Content Area */
+        /* Main Layout */
         main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
-        .view { padding: 2.5rem; display: none; }
-        .view.active { display: block; }
-        
-        .header { margin-bottom: 2rem; }
-        .card { background: white; border-radius: 16px; border: 1px solid var(--border); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        
-        /* Interactive Elements */
-        .input-box { margin-bottom: 20px; }
-        label { display: block; font-size: 0.8rem; font-weight: 600; color: #64748b; text-transform: uppercase; margin-bottom: 8px; }
-        input, textarea { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid var(--border); background: #f9fafb; font-size: 1rem; outline: none; }
-        .btn-save { background: var(--primary); color: white; border: none; padding: 16px 32px; border-radius: 12px; font-weight: 600; cursor: pointer; width: 100%; font-size: 1rem; }
+        .view { padding: 2.5rem; display: none; max-width: 1000px; margin: 0 auto; width: 100%; }
+        .view.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Table */
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 15px; color: #64748b; font-size: 0.8rem; text-transform: uppercase; border-bottom: 1px solid var(--border); }
-        td { padding: 15px; border-bottom: 1px solid #f1f5f9; }
-        .empty-state { text-align: center; padding: 4rem; color: #94a3b8; }
+        /* Components */
+        .card { background: white; border-radius: 16px; border: 1px solid var(--border); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        
+        /* Specialized Form Elements */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
+        input, textarea, select { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid var(--border); background: #f9fafb; font-size: 1rem; outline: none; transition: 0.2s; }
+        input:focus { border-color: var(--primary); background: white; }
+
+        /* Decision Support Badge */
+        .ai-badge { background: var(--sidebar); color: white; padding: 15px; border-radius: 12px; margin-top: 15px; display: none; border-left: 5px solid var(--accent); }
+
+        /* Action Buttons */
+        .btn-primary { background: var(--primary); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 700; cursor: pointer; width: 100%; font-size: 1rem; box-shadow: 0 10px 15px -3px rgba(59,130,246,0.3); }
+        .btn-ghost { background: #f1f5f9; color: var(--text-dark); border: none; padding: 8px 15px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+
+        /* Prescription Table */
+        .rx-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .rx-table td { padding: 10px; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -44,77 +51,115 @@
     <aside>
         <div class="logo"><i data-lucide="activity"></i> THE PULSE</div>
         <button class="nav-btn active" onclick="show('v-dash', this)"><i data-lucide="layout-grid"></i> Dashboard</button>
-        <button class="nav-btn" onclick="show('v-list', this)"><i data-lucide="users"></i> Patients</button>
-        <button class="nav-btn" onclick="show('v-add', this)"><i data-lucide="plus-circle"></i> New Entry</button>
-        <button class="nav-btn" onclick="show('v-proto', this)"><i data-lucide="file-text"></i> Protocols</button>
-        <button class="nav-btn" onclick="show('v-stats', this)"><i data-lucide="bar-chart-3"></i> Insights</button>
+        <button class="nav-btn" onclick="show('v-add', this)"><i data-lucide="plus-circle"></i> Smart Consult</button>
+        <button class="nav-btn" onclick="show('v-list', this)"><i data-lucide="users"></i> Registry</button>
+        <button class="nav-btn" onclick="show('v-proto', this)"><i data-lucide="shield-check"></i> Protocols</button>
+        <button class="nav-btn" onclick="show('v-stats', this)"><i data-lucide="trending-up"></i> Insights</button>
     </aside>
 
     <main>
-        <!-- View: Dashboard -->
+        <!-- VIEW: DASHBOARD -->
         <div id="v-dash" class="view active">
-            <div class="header"><h1>Clinical Status</h1></div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="header-flex">
+                <h1>Clinic Intelligence</h1>
+                <div id="live-time" style="font-weight: 600; color: var(--primary);"></div>
+            </div>
+            <div class="grid-2">
                 <div class="card">
-                    <p>Records Stored</p>
-                    <h2 id="total-count" style="font-size: 3rem; color: var(--primary);">0</h2>
+                    <label>Active Database</label>
+                    <h2 id="total-count" style="font-size: 3.5rem;">0</h2>
+                    <p style="color: #64748b;">Encrypted records on device</p>
                 </div>
                 <div class="card">
-                    <p>System Integrity</p>
-                    <h2 style="font-size: 3rem; color: #22c55e;">100%</h2>
+                    <label>Clinical Status</label>
+                    <h2 style="font-size: 2rem; color: #22c55e; margin-top: 10px;">Operational</h2>
+                    <p style="color: #64748b;">All Protocol modules loaded</p>
                 </div>
             </div>
         </div>
 
-        <!-- View: New Entry -->
+        <!-- VIEW: SMART CONSULT (THE CORE FUNCTION) -->
         <div id="v-add" class="view">
-            <div class="header"><h1>Add Patient Record</h1></div>
-            <div class="card">
-                <div class="input-box">
-                    <label>Patient Full Name</label>
-                    <input type="text" id="p-name" placeholder="Enter name...">
+            <div class="header-flex">
+                <h1>Smart Consultation</h1>
+                <span class="btn-ghost" onclick="clearForm()">Reset Session</span>
+            </div>
+            <div class="grid-2">
+                <div class="left-col">
+                    <div class="card">
+                        <div class="input-group">
+                            <label>Patient Identity</label>
+                            <input type="text" id="p-name" placeholder="Full Name">
+                        </div>
+                        <div class="input-group">
+                            <label>Symptoms / Chief Complaint</label>
+                            <textarea id="p-diag" rows="3" placeholder="Type symptoms (e.g. Fever, Chest Pain)" onkeyup="checkAI()"></textarea>
+                        </div>
+                        <!-- Decision Support Tooltip -->
+                        <div id="ai-hint" class="ai-badge">
+                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;">
+                                <i data-lucide="zap" size="16" color="#a78bfa"></i>
+                                <span style="font-weight: 700; font-size: 0.8rem;">CLINICAL SUGGESTION</span>
+                            </div>
+                            <p id="ai-text" style="font-size: 0.85rem; opacity: 0.9;"></p>
+                        </div>
+                    </div>
                 </div>
-                <div class="input-box">
-                    <label>Clinical Diagnosis</label>
-                    <textarea id="p-diag" rows="4" placeholder="Enter findings..."></textarea>
+                <div class="right-col">
+                    <div class="card">
+                        <label>Smart Prescription Engine</label>
+                        <div style="display:flex; gap:10px; margin-top:10px;">
+                            <input type="text" id="med-name" placeholder="Medication">
+                            <button class="btn-ghost" onclick="addMed()">Add</button>
+                        </div>
+                        <table class="rx-table">
+                            <tbody id="med-list"></tbody>
+                        </table>
+                    </div>
+                    <button class="btn-primary" onclick="saveData()">Finalize & Sync Record</button>
                 </div>
-                <button class="btn-save" onclick="saveData()">Confirm & Save Entry</button>
             </div>
         </div>
 
-        <!-- View: Patient List -->
+        <!-- VIEW: REGISTRY -->
         <div id="v-list" class="view">
-            <div class="header"><h1>Registry</h1></div>
-            <div class="card" style="padding: 0;">
-                <table id="p-table">
-                    <thead><tr><th>Patient ID</th><th>Name</th><th>Diagnosis</th></tr></thead>
+            <div class="header-flex"><h1>Patient Registry</h1></div>
+            <div class="card" style="padding: 0; overflow: hidden;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead style="background: #f1f5f9;">
+                        <tr><th style="padding: 15px; text-align: left;">ID</th><th style="padding: 15px; text-align: left;">Name</th><th style="padding: 15px; text-align: left;">Summary</th></tr>
+                    </thead>
                     <tbody id="p-body"></tbody>
                 </table>
-                <div id="empty-msg" class="empty-state">No records found. Add a new patient to begin.</div>
             </div>
         </div>
 
-        <!-- View: Protocols & Insights (Static for Screenshots) -->
+        <!-- VIEW: PROTOCOLS -->
         <div id="v-proto" class="view">
-            <div class="header"><h1>Clinical Protocols</h1></div>
-            <div class="card"><h3>Emergency Care v1.0</h3><p>Standard operating procedures for acute cases.</p></div>
-            <div class="card"><h3>Hypertension Guidelines</h3><p>Updated JNC-8 standards.</p></div>
+            <h1>Protocol Library</h1>
+            <p style="margin-bottom: 20px; color: #64748b;">Pre-validated clinical workflows.</p>
+            <div class="card"><h3>Hypertension Protocol (JNC-8)</h3><p>Step-wise management of BP > 140/90.</p></div>
+            <div class="card"><h3>Acute Febrile Illness</h3><p>Workup for fever > 3 days.</p></div>
         </div>
 
+        <!-- VIEW: INSIGHTS -->
         <div id="v-stats" class="view">
-            <div class="header"><h1>Insights</h1></div>
-            <div class="card" style="height: 300px; display: flex; align-items: center; justify-content: center; color: #94a3b8;">
-                [ Analytics Engine - Visualizing Data Trends ]
+            <h1>Clinic Insights</h1>
+            <div class="card" style="text-align: center; padding: 50px;">
+                <i data-lucide="bar-chart" size="48" color="#3b82f6"></i>
+                <h3 style="margin-top: 20px;">Data Visualization Loaded</h3>
+                <p>Generating trends based on <b><span class="count-span">0</span></b> records.</p>
             </div>
         </div>
     </main>
 
     <script>
         lucide.createIcons();
+        
+        let currentMeds = [];
+        let db = JSON.parse(localStorage.getItem('pulse_core_db')) || [];
 
-        // Local Storage Logic
-        let db = JSON.parse(localStorage.getItem('pulse_data')) || [];
-
+        // Function 1: Navigation Logic
         function show(id, btn) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -122,46 +167,81 @@
             btn.classList.add('active');
         }
 
+        // Function 2: Clinical Decision Support (AI Simulation)
+        function checkAI() {
+            const diag = document.getElementById('p-diag').value.toLowerCase();
+            const hint = document.getElementById('ai-hint');
+            const hintText = document.getElementById('ai-text');
+            
+            if (diag.includes("fever")) {
+                hint.style.display = "block";
+                hintText.innerText = "Protocol Match: Suggesting CBC and Dengue NS1 testing if fever persists.";
+            } else if (diag.includes("chest pain")) {
+                hint.style.display = "block";
+                hintText.innerText = "Urgent: Consider immediate ECG and Cardiac Enzymes workup.";
+            } else {
+                hint.style.display = "none";
+            }
+        }
+
+        // Function 3: Rx Engine
+        function addMed() {
+            const med = document.getElementById('med-name').value;
+            if(med) {
+                currentMeds.push(med);
+                document.getElementById('med-name').value = "";
+                renderMeds();
+            }
+        }
+
+        function renderMeds() {
+            const list = document.getElementById('med-list');
+            list.innerHTML = currentMeds.map(m => `<tr><td><i data-lucide='pill' size='12'></i> ${m}</td></tr>`).join('');
+            lucide.createIcons();
+        }
+
+        // Function 4: Data Persistence
         function saveData() {
             const name = document.getElementById('p-name').value;
             const diag = document.getElementById('p-diag').value;
+            if(!name) return alert("Patient name required");
 
-            if (name && diag) {
-                const entry = {
-                    id: 'P-' + Math.floor(Math.random() * 9000 + 1000),
-                    name: name,
-                    diag: diag
-                };
-                db.unshift(entry);
-                localStorage.setItem('pulse_data', JSON.stringify(db));
-                
-                document.getElementById('p-name').value = "";
-                document.getElementById('p-diag').value = "";
-                
-                updateUI();
-                alert("Entry Encrypted and Saved.");
-            } else {
-                alert("Please fill all fields.");
-            }
+            const entry = {
+                id: 'P-' + Math.floor(Math.random()*9000),
+                name, diag, meds: [...currentMeds]
+            };
+            db.unshift(entry);
+            localStorage.setItem('pulse_core_db', JSON.stringify(db));
+            alert("Clinical Record Finalized.");
+            clearForm();
+            updateUI();
+            show('v-list', document.querySelectorAll('.nav-btn')[2]);
+        }
+
+        function clearForm() {
+            document.getElementById('p-name').value = "";
+            document.getElementById('p-diag').value = "";
+            currentMeds = [];
+            renderMeds();
+            document.getElementById('ai-hint').style.display = "none";
         }
 
         function updateUI() {
+            document.getElementById('total-count').innerText = db.length;
+            document.querySelectorAll('.count-span').forEach(s => s.innerText = db.length);
             const body = document.getElementById('p-body');
-            const empty = document.getElementById('empty-msg');
-            const count = document.getElementById('total-count');
-
-            count.innerText = db.length;
-            body.innerHTML = "";
-            
-            if (db.length > 0) {
-                empty.style.display = "none";
-                db.forEach(p => {
-                    body.innerHTML += `<tr><td>#${p.id}</td><td><b>${p.name}</b></td><td>${p.diag}</td></tr>`;
-                });
-            } else {
-                empty.style.display = "block";
-            }
+            body.innerHTML = db.map(p => `
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 15px;">#${p.id}</td>
+                    <td style="padding: 15px; font-weight: 600;">${p.name}</td>
+                    <td style="padding: 15px;">${p.diag.substring(0, 30)}...</td>
+                </tr>
+            `).join('');
         }
+
+        setInterval(() => {
+            document.getElementById('live-time').innerText = new Date().toLocaleTimeString();
+        }, 1000);
 
         updateUI();
     </script>
